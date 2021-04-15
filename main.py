@@ -11,15 +11,15 @@ delay = 0.1
 # Set up the screen
 gameboard = turtle.Screen()
 gameboard.title("Snake PARTY By reg5060")
-gameboard.bgcolor("blue")
+gameboard.bgcolor("red")
 gameboard.setup(width=600, height=600)
 gameboard.tracer(0)
 
 # Snake head
 snake = turtle.Turtle()
 snake.speed(0)
-snake.shape("square")
-snake.color("brown")
+snake.shape("circle")
+snake.color("black")
 snake.penup()
 snake.goto(0,0)
 snake.direction = "stop"
@@ -28,24 +28,28 @@ snake.direction = "stop"
 food = turtle.Turtle()
 food.speed(0)
 food.shape("circle")
-food.color("red")
+food.color("grey")
 food.penup()
 food.goto(0,100)
 
 segments = []
 
-# Functions
+# Function
 def go_up():
-    snake.direction = "up"
+    if snake.direction != "down":
+        snake.direction = "up"
 
 def go_down():
-    snake.direction = "down"
+    if snake.direction != "up":
+        snake.direction = "down"
 
 def go_left():
-    snake.direction = "left"
+    if snake.direction != "right":
+        snake.direction = "left"
 
 def go_right():
-    snake.direction = "right"
+    if snake.direction != "left":
+        snake.direction = "right"
 
 def move():
     if snake.direction == "up":
@@ -75,6 +79,20 @@ gameboard.onkeypress(go_down, "Down")
 while True:
     gameboard.update()
 
+    # Check for a collision with the border
+    if snake.xcor()>290 or snake.xcor()<-290 or snake.ycor()>290 or snake.ycor()<-290:
+        time.sleep(1)
+        snake.goto(0,0)
+        snake.direction = "stop"
+
+        # Hide the segments
+        for segment in segments:
+            segment.goto(1000, 1000)
+
+        # Clear the segments list
+        segments.clear()
+
+
     #check for collision with the food
     if snake.distance(food) < 20:
         # Move the food to a random spot
@@ -86,7 +104,7 @@ while True:
         new_segment = turtle.Turtle()
         new_segment.speed(0)
         new_segment.shape("circle")
-        new_segment.color("yellow")
+        new_segment.color("orange")
         new_segment.penup()
         segments.append(new_segment)
 
@@ -103,6 +121,20 @@ while True:
         segments[0].goto(x,y)
 
     move()
+
+    # Check for a collision with the body segments
+    for segment in segments:
+        if segment.distance(snake) <20:
+            time.sleep(1)
+            snake.goto(0,0)
+            snake.direction = "stop"
+
+            # Hide the segments
+            for segment in segments:
+                segment.goto(1000, 1000)
+
+            # Clear the segments list
+            segments.clear()
 
     time.sleep(delay)
 
