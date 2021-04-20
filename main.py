@@ -8,10 +8,14 @@ import random
 
 delay = 0.1
 
+#Score!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+score = 0
+high_score = 0
+
 # Set up the screen
 gameboard = turtle.Screen()
 gameboard.title("Snake PARTY By reg5060")
-gameboard.bgcolor("red")
+gameboard.bgcolor("grey")
 gameboard.setup(width=600, height=600)
 gameboard.tracer(0)
 
@@ -28,11 +32,21 @@ snake.direction = "stop"
 food = turtle.Turtle()
 food.speed(0)
 food.shape("circle")
-food.color("grey")
+food.color("red")
 food.penup()
 food.goto(0,100)
 
 segments = []
+
+#Pen
+pen = turtle.Turtle()
+pen.speed(0)
+pen.shape("square")
+pen.color("blue")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 260)
+pen.write("score: 0  High Score: 0", align="center", font=("Lobster", 24, "normal"))
 
 # Function
 def go_up():
@@ -92,6 +106,13 @@ while True:
         # Clear the segments list
         segments.clear()
 
+        # Reset the score 
+        score = 0
+
+        pen.clear()
+        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Lobster", 24, "normal"))
+
+
 
     #check for collision with the food
     if snake.distance(food) < 20:
@@ -104,9 +125,19 @@ while True:
         new_segment = turtle.Turtle()
         new_segment.speed(0)
         new_segment.shape("circle")
-        new_segment.color("orange")
+        new_segment.color("red")
         new_segment.penup()
         segments.append(new_segment)
+
+        # Increase the score
+        score += 10
+
+        if score > high_score:
+            high_score = score
+
+        pen.clear()
+        pen.write("Score: {} High Score: {}".format(score, high_score), align="center", font=("Lobster", 24, "normal"))
+
 
     #Move the end segments first in reverse open
     for index in range(len(segments)-1, 0, -1):
